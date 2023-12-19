@@ -145,40 +145,31 @@ select optgroup{
         <a href="#" class="text-decoration-none text-center  mb-2 mb-md-1 ">Elfelejtetted a jelszavad?</a>
         <a href="#" class="text-decoration-none text-center  mb-5">Már regisztráltál?</a>
     </div>
-    
-    
 </div>
 
 <script>
-
-        const select = document.getElementsByClassName('form-select')[1]
-        const xhr = new XMLHttpRequest;
-
-        const fillDropdown = data => {
-            const response = JSON.parse(data);
-
-            const eredmeny = response.map( country => {
-                return `<option>${country.name} - ${country.native}</option>`
-               })
-               
-            console.log(eredmeny)                     
-
-            select.innerHTML = eredmeny
-        }
-
+    const select = document.getElementsByClassName('form-select')[1]
     
-        xhr.onreadystatechange = function() {
-            if( this.readyState === 4 && this.status === 200 ) {
-                fillDropdown(xhr.response)
-            }
-        }
+    const fillDropdown = data => {
 
+        const eredmeny = data.map( country => {
+            return `<option>${country.name} - ${country.native}</option>`
+           })
+           
+        console.log(eredmeny)                     
 
-        xhr.open('GET', 'https://backend.ichat.hu/api/countries')
-        xhr.send()
+        select.innerHTML = eredmeny
+    }
 
-
+    fetch('https://backend.ichat.hu/api/countries')
+        .then( function(response) {
+            console.log(response)
+            return response.json()
+        })
+        .then(function(result){
+            console.log(result);
+            fillDropdown(result);
+        })
 </script>
-
 </body>
 </html>
