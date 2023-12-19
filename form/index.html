@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>    3333333    </title>
+    <title>    form    </title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" 
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
     crossorigin="anonymous">
 
+    <style>
+select optgroup{
+    font-style: normal;
+}
+    </style>
 </head>
 <body>
 
@@ -16,37 +21,39 @@
     <form action="/valahova" method="post">
     
         <!-- Első sor -->
-        <div class="row row-cols-1    row-cols-md-2  my-sm-4    mt-md-5  ">
+        <div class="row row-cols-1    row-cols-md-2  mt-3   mt-md-3 ">
 
             <!-- NÉV 1. sor Első oszlop -->
-            <div class="               ">
+            <div class="   my-2  mt-md-3             ">
                 <label for="name" class="form-label">Név</label>
                 <input type="text" class="form-control" id="name" placeholder="Hogy hívnak?">
             </div>
     
             <!-- EMAIL 1. sor Második oszlop -->
-            <div class="                      ">
+            <div class="    my-2  mt-md-3                  ">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" placeholder="E-mail címed">
             </div>
 
             
             <!-- LAKHELY 2. sor 1. oszlop -->
-            <div class="                      ">
+            <div class="    my-2  mt-md-3                 ">
                 <label for="select_country" class="form-label">Lakhely (ország)</label>
 
                 <select name="select_country" id="select_country" class="form-select">
-                    <option value="">Magyarország</option>
-                    <option value="">ország 1</option>
-                    <option value="">Három</option>
-                    <option value="">Négy</option>
+
+                    <option value="Hungary">Hungary - Magyarország</option>
+                    <optgroup label="Válassz:"  class="form-select">
+                    </optgroup>
+                  
+        
                 </select>
 
-
+      
             </div>
 
             <!-- VÁROS 2. sor 2. oszlop -->
-            <div class="                         ">
+            <div class="   my-2  mt-md-3      ">
                 <label for="city" class="form-label">Város</label>
                 <input type="text" class="form-control" id="city">
             </div>
@@ -54,28 +61,27 @@
             <!-- Harmadik sor -->
 
             <!-- TELEFONSZÁM 3. sor 1. oszlop -->
-            <div class="                           ">
+            <div class="  my-2  mt-md-3       ">
                 <label for="phoneNumber" class="form-label">Telefonszám</label>
                 <input type="tel" class="form-control" id="phoneNumber" placeholder="Csak számjegyeket adj meg">
             </div>
 
             <!-- SZÜLETÉSI DÁTUM 3. sor 2. oszlop -->
-            <div class="                                   ">
+            <div class="  my-2  mt-md-3     ">
                 <label for="birthDate" class="form-label">Születési dátum</label>
                 <input type="date" class="form-control" id="birthDate">
             </div>
 
-
             <!-- Negyedik sor -->
        
             <!-- JELSZÓ 4. sor 1. oszlop -->
-            <div class="                             ">
+            <div class="  my-2  mt-md-3      ">
                 <label for="password" class="form-label">Jelszó</label>
                 <input type="password" class="form-control" id="password" placeholder="Jelszavad">
             </div>
 
             <!-- JELSZÓ ISMÉT 4. sor 2. oszlop -->
-            <div class="                              ">
+            <div class="  my-2  mt-md-3     ">
                 <label for="password_confirmation" class="form-label">Jelszó ismét</label>
                 <input type="password" class="form-control" id="password_confirmation" placeholder="Jelszavad ismét">
             </div>
@@ -84,10 +90,10 @@
     
     
         <!-- NEMED Radio button -->
-        <div class="row          my-sm-4      ">
+        <div class="row          my-4      ">
             <div class="col">
 
-                <label>Nemed:</label>
+                <label class="mb-2">Nemed:</label>
 
                 <div class="form-check">
                     <input type="radio" class="form-check-input" id="man"
@@ -113,7 +119,7 @@
 
 
         <!-- Felhasználási feltételek -->
-        <div class="row           mb-sm-4  mb-md-5  ">
+        <div class="row           mb-4  mb-md-5  ">
             <div class="col">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="aszf" id="aszf">
@@ -124,7 +130,7 @@
 
 
         <!-- Regisztráció -->
-        <div class="row          mb-sm-4       ">
+        <div class="row          mb-4       ">
             <div class="col">
 
                 <button class="btn btn-primary col-12" type="submit">Regisztráció</button>
@@ -135,16 +141,44 @@
 
     </form>
 
-
     <div class="row">
-        <a href="#" class="text-decoration-none text-center  mb-sm-2 mb-md-1 ">Elfelejtetted a jelszavad?</a>
-        <a href="#" class="text-decoration-none text-center  mb-4">Már regisztráltál?</a>
+        <a href="#" class="text-decoration-none text-center  mb-2 mb-md-1 ">Elfelejtetted a jelszavad?</a>
+        <a href="#" class="text-decoration-none text-center  mb-5">Már regisztráltál?</a>
     </div>
     
     
 </div>
 
+<script>
+
+        const select = document.getElementsByClassName('form-select')[1]
+        const xhr = new XMLHttpRequest;
+
+        const fillDropdown = data => {
+            const response = JSON.parse(data);
+
+            const eredmeny = response.map( country => {
+                return `<option>${country.name} - ${country.native}</option>`
+               })
+               
+            console.log(eredmeny)                     
+
+            select.innerHTML = eredmeny
+        }
 
     
+        xhr.onreadystatechange = function() {
+            if( this.readyState === 4 && this.status === 200 ) {
+                fillDropdown(xhr.response)
+            }
+        }
+
+
+        xhr.open('GET', 'https://backend.ichat.hu/api/countries')
+        xhr.send()
+
+
+</script>
+
 </body>
 </html>
