@@ -40,22 +40,24 @@ select optgroup{
             <div class="    my-2  mt-md-3                 ">
                 <label for="select_country" class="form-label">Lakhely (ország)</label>
 
-                <select name="select_country" id="select_country" class="form-select">
+                <select id="select_country" class="form-select" name="select_country" onchange="fillPlaceholder()" >
 
-                    <option value="Hungary">Hungary - Magyarország</option>
+                    <option value="" id="empty"> </option>
+                    <option value="Hungary" id="hungary">Hungary - Magyarország</option>
                     <optgroup label="Válassz:"  class="form-select">
                     </optgroup>
                   
-        
                 </select>
-
-      
             </div>
 
             <!-- VÁROS 2. sor 2. oszlop -->
             <div class="   my-2  mt-md-3      ">
                 <label for="city" class="form-label">Város</label>
-                <input type="text" class="form-control" id="city">
+
+                <input type="text"   list="cities"   class="form-control"  name="city"  id="city"      >
+                <!-- <input list="browsers" name="browser" id="browser"> -->
+                <datalist id="cities">
+                </datalist>
             </div>
 
             <!-- Harmadik sor -->
@@ -88,7 +90,6 @@ select optgroup{
 
         </div>
     
-    
         <!-- NEMED Radio button -->
         <div class="row          my-4      ">
             <div class="col">
@@ -112,11 +113,8 @@ select optgroup{
                     name="gender" value="others">
                     <label for="other" class="form-check-label">Egyéb</label>
                 </div>
-                
             </div>
-
         </div>
-
 
         <!-- Felhasználási feltételek -->
         <div class="row           mb-4  mb-md-5  ">
@@ -148,10 +146,15 @@ select optgroup{
 </div>
 
 <script>
-    const select = document.getElementsByClassName('form-select')[1]
-    
-    const fillDropdown = data => {
 
+function fillPlaceholder() {
+    document.getElementById('city').placeholder = "Kezdj el gépelni..."
+}
+
+    // Load countries
+    const select = document.getElementsByClassName('form-select')[1]
+
+    const fillDropdown = data => {
         const eredmeny = data.map( country => {
             return `<option>${country.name} - ${country.native}</option>`
            })
@@ -162,14 +165,39 @@ select optgroup{
     }
 
     fetch('https://backend.ichat.hu/api/countries')
-        .then( function(response) {
-            console.log(response)
-            return response.json()
-        })
-        .then(function(result){
+        .then(
+            function(response){
+                if(response.ok)
+                    return response.json()
+                else
+                throw res;
+            })
+
+        .then( result => {
             console.log(result);
             fillDropdown(result);
         })
+       
+    // Load cities
+    const datalist = document.getElementsByTagName('datalist')[0]
+
+    const fillDatalist = data => {
+        const eredmeny = data.map( city => {
+            return `<option value="${city.name} (${city.state_code})">`
+            }).join('')
+               
+        console.log(eredmeny) 
+
+        datalist.innerHTML = eredmeny
+    }
+    
+    fetch('https://backend.ichat.hu/api/countries/1/cities')
+        .then( response => response.json() )
+        .then( result => {
+            console.log(result);
+            fillDatalist(result);
+        })
+ 
 </script>
 </body>
 </html>
