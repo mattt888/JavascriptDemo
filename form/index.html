@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>    form    </title>
+    <title>form</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" 
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
     crossorigin="anonymous">
 
     <style>
-select optgroup{
-    font-style: normal;
-}
+        select optgroup{
+            font-style: normal;
+        }
     </style>
 </head>
 <body>
@@ -35,7 +35,6 @@ select optgroup{
                 <input type="email" class="form-control" id="email" placeholder="E-mail címed" name="email">
             </div>
 
-            
             <!-- LAKHELY 2. sor 1. oszlop -->
             <div class="my-2  mt-md-3">
                 <label for="select_country" class="form-label">Lakhely (ország)</label>
@@ -125,14 +124,12 @@ select optgroup{
             </div>
         </div>
 
-
         <!-- Regisztráció -->
         <div class="row mb-4">
             <div class="col">
                 <button class="btn btn-primary col-12" type="submit">Regisztráció</button>
             </div>
         </div>
-
     </form>
 
     <div class="row">
@@ -181,44 +178,71 @@ document.querySelector('form').onsubmit = e => {
     }
 
     fetch('http://localhost:3000', config )
-     
 }
 
 function fillPlaceholder() {
     document.getElementById('city').placeholder = "Kezdj el gépelni..."
 }
 
-    // populate countries
-    const select = document.getElementsByClassName('form-select')[1]
+    // populate countries and cities in order
+    async function getData(url){
+        
+        const result = await fetch('https://backend.ichat.hu/api/' + url)
+            .then(
+                function(response){
+                    if(response.ok)
+                        return response.json()
+                    else
+                    throw response
+                })
 
-    const fillDropdown = data => {
-        const eredmeny = data.map( country => {
-            return `<option>${country.name} - ${country.native}</option>`
-           })
-           
+            .then( result => {
+                console.log(result)
+                populateCountries(result)
+            })
+            .catch( async err => {
+                const errors = await err.json()
+                console.log(errors)
+            });
+
+        await fetch('https://backend.ichat.hu/api/countries/1/cities')
+            .then(
+                function(response){
+                    if(response.ok)
+                        return response.json()
+                    else
+                    throw response
+                })
+
+            .then( result => {
+                console.log(result);
+                populateCities(result);
+            })
+            .catch( async err => {
+                const errors = await err.json()
+                console.log(errors)
+            })
+    }
+
+    getData('countries')
+
+    const select = document.getElementsByClassName('form-select')[1]
+      
+    // populate countries function
+    const populateCountries = data => {
+    const eredmeny = data.map( country => {
+        return `<option>${country.name} - ${country.native}</option>`
+        })
+        
         console.log(eredmeny)                     
 
         select.innerHTML = eredmeny
     }
 
-    fetch('https://backend.ichat.hu/api/countries')
-        .then(
-            function(response){
-                if(response.ok)
-                    return response.json()
-                else
-                throw res;
-            })
-
-        .then( result => {
-            console.log(result);
-            fillDropdown(result);
-        })
-       
-    // populate cities
+    // populate cities function
     const datalist = document.getElementsByTagName('datalist')[0]
 
-    const fillDatalist = data => {
+    const populateCities = data => {
         const eredmeny = data.map( city => {
             return `<option value="${city.name} (${city.state_code})">`
             }).join('')
@@ -228,13 +252,6 @@ function fillPlaceholder() {
         datalist.innerHTML = eredmeny
     }
     
-    fetch('https://backend.ichat.hu/api/countries/1/cities')
-        .then( response => response.json() )
-        .then( result => {
-            console.log(result);
-            fillDatalist(result);
-        })
- 
 </script>
 </body>
 </html>
