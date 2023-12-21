@@ -18,26 +18,26 @@ select optgroup{
 <body>
 
 <div class="container">
-    <form action="/valahova" method="post">
+    <form action="/feldolgozo" method="post">
     
         <!-- Első sor -->
-        <div class="row row-cols-1    row-cols-md-2  mt-3   mt-md-3 ">
+        <div class="row row-cols-1 row-cols-md-2  mt-3  mt-md-3 ">
 
             <!-- NÉV 1. sor Első oszlop -->
-            <div class="   my-2  mt-md-3             ">
+            <div class="my-2  mt-md-3">
                 <label for="name" class="form-label">Név</label>
-                <input type="text" class="form-control" id="name" placeholder="Hogy hívnak?">
+                <input type="text" class="form-control" id="name" placeholder="Hogy hívnak?" name="name">
             </div>
     
             <!-- EMAIL 1. sor Második oszlop -->
-            <div class="    my-2  mt-md-3                  ">
+            <div class="my-2  mt-md-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="E-mail címed">
+                <input type="email" class="form-control" id="email" placeholder="E-mail címed" name="email">
             </div>
 
             
             <!-- LAKHELY 2. sor 1. oszlop -->
-            <div class="    my-2  mt-md-3                 ">
+            <div class="my-2  mt-md-3">
                 <label for="select_country" class="form-label">Lakhely (ország)</label>
 
                 <select id="select_country" class="form-select" name="select_country" onchange="fillPlaceholder()" >
@@ -51,11 +51,10 @@ select optgroup{
             </div>
 
             <!-- VÁROS 2. sor 2. oszlop -->
-            <div class="   my-2  mt-md-3      ">
+            <div class="my-2  mt-md-3">
                 <label for="city" class="form-label">Város</label>
 
-                <input type="text"   list="cities"   class="form-control"  name="city"  id="city"      >
-                <!-- <input list="browsers" name="browser" id="browser"> -->
+                <input type="text"   list="cities"   class="form-control"  name="city"  id="city" >
                 <datalist id="cities">
                 </datalist>
             </div>
@@ -63,35 +62,35 @@ select optgroup{
             <!-- Harmadik sor -->
 
             <!-- TELEFONSZÁM 3. sor 1. oszlop -->
-            <div class="  my-2  mt-md-3       ">
-                <label for="phoneNumber" class="form-label">Telefonszám</label>
-                <input type="tel" class="form-control" id="phoneNumber" placeholder="Csak számjegyeket adj meg">
+            <div class="my-2  mt-md-3">
+                <label for="phonenumber" class="form-label">Telefonszám</label>
+                <input type="tel" class="form-control" id="phonenumber" placeholder="Csak számjegyeket adj meg" name="phone">
             </div>
 
             <!-- SZÜLETÉSI DÁTUM 3. sor 2. oszlop -->
-            <div class="  my-2  mt-md-3     ">
+            <div class="my-2  mt-md-3">
                 <label for="birthDate" class="form-label">Születési dátum</label>
-                <input type="date" class="form-control" id="birthDate">
+                <input type="date" class="form-control" id="birthdate" min="1900-01-01" max="2023-12-31" name="birth" >
             </div>
 
             <!-- Negyedik sor -->
        
             <!-- JELSZÓ 4. sor 1. oszlop -->
-            <div class="  my-2  mt-md-3      ">
+            <div class="my-2  mt-md-3">
                 <label for="password" class="form-label">Jelszó</label>
-                <input type="password" class="form-control" id="password" placeholder="Jelszavad">
+                <input type="password" class="form-control" id="password" placeholder="Jelszavad" name="password">
             </div>
 
             <!-- JELSZÓ ISMÉT 4. sor 2. oszlop -->
-            <div class="  my-2  mt-md-3     ">
+            <div class="my-2  mt-md-3">
                 <label for="password_confirmation" class="form-label">Jelszó ismét</label>
-                <input type="password" class="form-control" id="password_confirmation" placeholder="Jelszavad ismét">
+                <input type="password" class="form-control" id="password_confirmation" placeholder="Jelszavad ismét" name="password_confirmation">
             </div>
 
         </div>
     
         <!-- NEMED Radio button -->
-        <div class="row          my-4      ">
+        <div class="row my-4">
             <div class="col">
 
                 <label class="mb-2">Nemed:</label>
@@ -110,14 +109,14 @@ select optgroup{
                 
                 <div class="form-check">
                     <input type="radio" class="form-check-input" id="other"
-                    name="gender" value="others">
+                    name="gender" value="other">
                     <label for="other" class="form-check-label">Egyéb</label>
                 </div>
             </div>
         </div>
 
         <!-- Felhasználási feltételek -->
-        <div class="row           mb-4  mb-md-5  ">
+        <div class="row mb-4 mb-md-5">
             <div class="col">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="aszf" id="aszf">
@@ -128,13 +127,10 @@ select optgroup{
 
 
         <!-- Regisztráció -->
-        <div class="row          mb-4       ">
+        <div class="row mb-4">
             <div class="col">
-
                 <button class="btn btn-primary col-12" type="submit">Regisztráció</button>
-
             </div>
-
         </div>
 
     </form>
@@ -147,11 +143,52 @@ select optgroup{
 
 <script>
 
+document.querySelector('form').onsubmit = e => {
+    e.preventDefault()
+
+    const name = document.getElementById('name').value
+    const email = document.getElementById('email').value
+    const select_country = document.getElementById('select_country').value
+    const city = document.getElementById('city').value
+    const phonenumber = document.getElementById('phonenumber').value
+    const birthdate = document.getElementById('birthdate').value
+    const password = document.getElementById('password').value
+    const password_confirmation = document.getElementById('password_confirmation').value
+    const man = document.querySelector('input[name="gender"]:checked').value
+    const woman = document.querySelector('input[name="gender"]:checked').value
+    const other = document.querySelector('input[name="gender"]:checked').value
+
+    const data = JSON.stringify({
+        name:name,
+        email:email,
+        country:select_country,
+        city:city,
+        phonenumber:phonenumber,
+        birthdate:birthdate,
+        password:password,
+        password_confirmation:password_confirmation,
+        gender:man,
+        gender:woman,
+        gender:other
+    })
+
+    const config = {
+        method: 'POST', 
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: data
+    }
+
+    fetch('http://localhost:3000', config )
+     
+}
+
 function fillPlaceholder() {
     document.getElementById('city').placeholder = "Kezdj el gépelni..."
 }
 
-    // Load countries
+    // populate countries
     const select = document.getElementsByClassName('form-select')[1]
 
     const fillDropdown = data => {
@@ -178,7 +215,7 @@ function fillPlaceholder() {
             fillDropdown(result);
         })
        
-    // Load cities
+    // populate cities
     const datalist = document.getElementsByTagName('datalist')[0]
 
     const fillDatalist = data => {
