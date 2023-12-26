@@ -39,11 +39,11 @@
             <div class="my-2  mt-md-3">
                 <label for="select_country" class="form-label">Lakhely (ország)</label>
 
-                <select id="select_country" class="form-select" name="select_country" onchange="fillPlaceholder()" >
+                <select id="select_country" class="form-select" name="select_country">
 
                     <option value="" id="empty"> </option>
-                    <option value="Hungary" id="hungary">Hungary - Magyarország</option>
-                    <optgroup label="Válassz:"  class="form-select">
+                    <option value=99 id="hungary">Hungary - Magyarország</option>
+                    <optgroup label="Válassz:"  class="form-select" id="optgroup">
                     </optgroup>
                   
                 </select>
@@ -68,7 +68,7 @@
 
             <!-- SZÜLETÉSI DÁTUM 3. sor 2. oszlop -->
             <div class="my-2  mt-md-3">
-                <label for="birthDate" class="form-label">Születési dátum</label>
+                <label for="birthdate" class="form-label">Születési dátum</label>
                 <input type="date" class="form-control" id="birthdate" min="1900-01-01" max="2023-12-31" name="birth" >
             </div>
 
@@ -180,11 +180,27 @@ document.querySelector('form').onsubmit = e => {
     fetch('http://localhost:3000', config )
 }
 
-function fillPlaceholder() {
+document.getElementById("select_country").addEventListener('change', function(){
     document.getElementById('city').placeholder = "Kezdj el gépelni..."
-}
+})
 
-    // populate countries and cities in order
+// document.getElementById("select_country").addEventListener('click', function(){
+//     document.querySelector('optgroup').style.backgroundColor = "beige"
+// })
+
+document.getElementById("select_country").addEventListener('change', function(){
+ 
+    const element = document.getElementById("select_country");
+    const countryID = element.options[element.selectedIndex].value;
+    const countryText = element.options[element.selectedIndex].text;
+
+    console.log('countryID: ' + countryID)
+    console.log("countryText: "+ countryText)
+
+    getCity(`https://backend.ichat.hu/api/countries/${countryID}/cities`)
+    console.log('meghívtam')
+})
+    // populate countries
     async function getData(url){
         
         const result = await fetch('https://backend.ichat.hu/api/' + url)
@@ -205,23 +221,7 @@ function fillPlaceholder() {
                 console.log(errors)
             });
 
-        await fetch('https://backend.ichat.hu/api/countries/1/cities')
-            .then(
-                function(response){
-                    if(response.ok)
-                        return response.json()
-                    else
-                    throw response
-                })
-
-            .then( result => {
-                console.log(result);
-                populateCities(result);
-            })
-            .catch( async err => {
-                const errors = await err.json()
-                console.log(errors)
-            })
+            console.log("eddig tart az oldalbetöltés")
     }
 
     getData('countries')
@@ -231,12 +231,31 @@ function fillPlaceholder() {
     // populate countries function
     const populateCountries = data => {
     const eredmeny = data.map( country => {
-        return `<option>${country.name} - ${country.native}</option>`
+        return `<option value="${country.id}">${country.name} - ${country.native}</option>`
         })
         
         console.log(eredmeny)                     
 
         select.innerHTML = eredmeny
+    }
+
+    async function getCity(url){
+        const result = await fetch(url)
+            .then(
+                function(response){
+                    if(response.ok)
+                        return response.json()
+                    else
+                    throw response
+                })
+            .then( result => {
+                console.log(result)
+                populateCities(result)
+            })
+            .catch( async err => {
+                const errors = await err.json()
+                console.log(errors)
+            });
     }
 
     // populate cities function
@@ -251,7 +270,6 @@ function fillPlaceholder() {
 
         datalist.innerHTML = eredmeny
     }
-    
 </script>
 </body>
 </html>
